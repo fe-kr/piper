@@ -36,14 +36,17 @@ program
   .option("-s, --selector <string>", "Add target node css selector")
   .action(async (args) => {
     try {
-        await validateArgs(args);
+      await validateArgs(args);
 
-        const data = await fetch(args.url).then((res) => res.text());
-        const $ = load(data);
-        const text = $(args.selector).text();
-        console.log(text);
+      const data = await fetch(args.url)
+        .then((res) => res.text())
+        .catch(() => Promise.reject(CliMessage.REQUEST_ERROR));
+
+      const $ = load(data);
+      const text = $(args.selector).text();
+      console.log(text);
     } catch (err) {
-       console.log(err);
+      console.log(err);
     }
   });
 
